@@ -1,74 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>JS + CSS Clock</title>
-</head>
-<body>
-
-
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS + CSS Clock</title>
+  </head>
+  <body>
     <div class="clock">
       <div class="clock-face">
         <div class="hand hour-hand"></div>
         <div class="hand min-hand"></div>
         <div class="hand second-hand"></div>
+        <div class="clock-center"></div>
       </div>
     </div>
+    <br />
 
+    <style>
+      html {
+        /* background: #018ded url(https://unsplash.it/1500/1000?image=881&blur=5); */
+        background-color: rgba(37, 62, 85, 0.555);
+        background-size: cover;
+        font-family: "helvetica neue";
+        text-align: center;
+        font-size: 10px;
+      }
 
-  <style>
-    html {
-      background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
-      background-size: cover;
-      font-family: 'helvetica neue';
-      text-align: center;
-      font-size: 10px;
-    }
+      body {
+        margin: 0;
+        font-size: 2rem;
+        display: flex;
+        flex: 1;
+        min-height: 100vh;
+        align-items: center;
+      }
 
-    body {
-      margin: 0;
-      font-size: 2rem;
-      display: flex;
-      flex: 1;
-      min-height: 100vh;
-      align-items: center;
-    }
+      .clock {
+        width: 30rem;
+        height: 30rem;
+        border: 20px solid white;
+        border-radius: 50%;
+        margin: 50px auto;
+        position: relative;
+        padding: 2rem;
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 0 3px #efefef,
+          inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
+      }
 
-    .clock {
-      width: 30rem;
-      height: 30rem;
-      border: 20px solid white;
-      border-radius: 50%;
-      margin: 50px auto;
-      position: relative;
-      padding: 2rem;
-      box-shadow:
-        0 0 0 4px rgba(0,0,0,0.1),
-        inset 0 0 0 3px #EFEFEF,
-        inset 0 0 10px black,
-        0 0 10px rgba(0,0,0,0.2);
-    }
+      .clock-face {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform: translateY(
+          -3px
+        ); /* account for the height of the clock hands */
+      }
 
-    .clock-face {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
-    }
+      .hand {
+        width: 50%;
+        height: 9px;
+        background: black;
+        position: absolute;
+        border-radius: 25%;
+        top: 50%;
+      }
 
-    .hand {
-      width: 50%;
-      height: 6px;
-      background: black;
-      position: absolute;
-      top: 50%;
-    }
+      /**/
+      .hour-hand {
+        background-color: brown;
+      }
 
-  </style>
+      .min-hand {
+        background-color: darkcyan;
+      }
 
-  <script>
+      .clock-center {
+        position: absolute;
+        width: 20%;
+        height: 20%;
+        top: 40%;
+        right: 40%;
+        border-radius: 50%;
+        background-color: darkslategrey;
+      }
+    </style>
 
+    <script>
+      const hand = document.querySelectorAll(".hand");
+      const handArr = Array.from(hand);
+      for (let h of handArr) {
+        h.style.transformOrigin = "top right";
+      }
 
-  </script>
-</body>
+      const hourHand = document.querySelector(".hour-hand");
+      const minHand = document.querySelector(".min-hand");
+      const secHand = document.querySelector(".second-hand");
+
+      const moveHand = function (hand, deg) {
+        hand.style.transform = `rotate(${deg}deg)`;
+      };
+
+      setInterval(function () {
+        const date = new Date();
+        const hour = date.getHours();
+        const minute = date.getMinutes();
+        const second = date.getSeconds();
+        console.log(hour, minute, second);
+
+        //hour 0시 : 90도 3시 180도. -> 1시간에 30도. 시작 +90도
+        const hourR = hour * 30 + 90;
+        moveHand(hourHand, hourR);
+
+        //minute : 0도 0분 90도 15분. -> 1분당 6도
+        const minR = minute * 6 + 90;
+        moveHand(minHand, minR);
+
+        //second : 0도 0초 90도 15초.
+        const secR = second * 6 + 90;
+        moveHand(secHand, secR);
+      }, 1000);
+    </script>
+  </body>
 </html>
