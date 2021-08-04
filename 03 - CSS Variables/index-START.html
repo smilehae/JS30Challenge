@@ -26,12 +26,12 @@
         name="blur"
         min="0"
         max="25"
-        value="10"
+        value="0"
         data-sizing="px"
       />
 
       <label for="base">Base Color</label>
-      <input id="base" type="color" name="base" value="#ffc600" />
+      <input id="base" type="color" name="base" value="#ffffff" />
     </div>
 
     <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500" />
@@ -57,21 +57,45 @@
       input {
         width: 100px;
       }
+
+      image {
+        background-color: white;
+      }
     </style>
 
     <script>
       const changeColor = function (color) {
         const hl = document.querySelector(".hl");
+        const img = document.querySelector("img");
+        img.style.backgroundColor = color;
         hl.style.color = color;
       };
 
-      const base = document.getElementById("base");
+      const changeSpace = function (space) {
+        const img = document.querySelector("img");
+        img.style.padding = space + "px";
+      };
 
+      const changeBlur = function (blur) {
+        const img = document.querySelector("img");
+        img.style.filter = `blur(${blur}px)`;
+      };
+
+      const spacing = document.getElementById("spacing");
+      spacing.addEventListener("input", function () {
+        changeSpace(`${this.value}`);
+        console.log(this.value);
+      });
+
+      const base = document.getElementById("base");
       base.addEventListener("input", function (event) {
         changeColor(`${this.value}`);
       });
 
-      changeColor("#000000");
+      const blur = document.getElementById("blur");
+      blur.addEventListener("input", function () {
+        changeBlur(this.value);
+      });
     </script>
   </body>
 </html>
