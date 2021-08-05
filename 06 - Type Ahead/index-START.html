@@ -16,7 +16,6 @@
     <script>
       const endpoint =
         "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
-
       //미해의 시도
       //  /   JSON을 가져오기 위해서는, XMLHttpRequest(XHR) API를 사용하면 된다.
       // const request = new XMLHttpRequest();
@@ -27,24 +26,7 @@
       //   const cities = request.response;
       //   input.addEventListener("input", filterCities(cities, "New"));
       // };
-
-      function filterCities(cities, str) {
-        const listContainer = document.querySelector(".suggestions");
-        const cityArr = Array.from(cities).filter(function (city) {
-          return city["city"].includes(str) || city["state"].includes(str);
-        });
-        console.log(cityArr);
-        const listTag = Array.from(document.querySelectorAll("li"));
-        listTag.forEach((element) => {
-          element.remove();
-        });
-
-        for (let i = 0; i < cityArr.length; i++) {
-          const nameBlock = document.createElement("li");
-          nameBlock.textContent = `${cityArr[i].city}, ${cityArr[i].state}`;
-          listContainer.appendChild(nameBlock);
-        }
-      }
+      const cities = [];
       /////////////////////////////////////////////////////////
       //답 참고
       //XMLHttpReqest의 대체제인 fetch API를 사용하였다.
@@ -52,15 +34,89 @@
       //또한 쿠키를 보내거나 받지 않는다.
 
       //fetch 사용 흐름은, 특정 인수의 경로에 따라서 가져오고, 응답을 포함하는 약속(response)를 반환하는것.
-      const cities = [];
       fetch(endpoint)
         .then((blob) => blob.json())
         .then((data) => cities.push(...data));
 
-      const input = document.querySelector(".search");
-      input.addEventListener("input", function () {
-        filterCities(cities, this.value);
-      });
+      // const input = document.querySelector(".search");
+      // input.addEventListener("input", function () {
+      //   filterCities(cities, this.value);
+      // });
+
+      function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      function findMatches(wordToMatch, cities) {
+        return cities.filter((place) => {
+          // here we need to figure out if the city or state matches what was searched
+          const regex = new RegExp(wordToMatch, "gi");
+          //g라는건 가장 처음이 매칭된다고 리턴하지 말라는 뜻.
+          //i는 insensitive. 여러개중 일부만 맞아도 됨
+          //따라서 아래줄은, wordToMatch랑 일부만 맞아도 true를 반환함
+          return place.city.match(regex) || place.state.match(regex);
+        });
+      }
+
+      function displayMatches() {
+        const matchArray = findMatches(this.value, cities);
+        const suggestions = document.querySelector(".suggestions");
+
+        const html = matchArray
+          .map((place) => {
+            const regex = new RegExp(this.value, "gi");
+            //일치하는 문자를 regex에 저장하고, 해당 부분을 하이라이트로 바꿈!
+            //아예 array.map으로 객체의 두 요소만 빼와서 string으로 만드는것.
+            const cityName = place.city.replace(
+              regex,
+              `<span class="hl">${this.value}</span>`
+            );
+            const stateName = place.state.replace(
+              regex,
+              `<span class="hl">${this.value}</span>`
+            );
+            return `
+        <li>
+          <span class="name">${cityName}, ${stateName}</span>
+          <span class="population">${numberWithCommas(place.population)}</span>
+        </li>
+      `;
+          })
+          .join("");
+        suggestions.innerHTML = html;
+      }
+
+      //미해 시도 : 어떻게든 함수 만들고 filter걸고 string안에 html들 넣기 까진 잘 했는데, 하이라이트를 넣지 못했다.
+      function filterCities(cities, str) {
+        const listContainer = document.querySelector(".suggestions");
+        const cityArr = Array.from(cities).filter(function (city) {
+          return city["city"].includes(str) || city["state"].includes(str);
+        });
+        const listTag = Array.from(document.querySelectorAll("li"));
+        listTag.forEach((element) => {
+          element.remove();
+        });
+
+        for (let i = 0; i < cityArr.length; i++) {
+          const nameBlock = document.createElement("li");
+          const indexCity = cityArr[i].city.indexOf(str);
+
+          nameBlock.innerHTML = `${cityArr[i].city}, ${cityArr[i].state}
+            <span class="population">
+              ${numberWithCommas(cityArr[i].population)}
+            </span>`;
+          if (indexCity >= 0) {
+            nameBlock.innerHTML =
+              nameBlock.innerHTML.substring(0, indexCity) +
+              `<span class='hl'>${str}</span>`;
+          }
+          listContainer.appendChild(nameBlock);
+        }
+      }
+
+      const searchInput = document.querySelector(".search");
+      searchInput.addEventListener("change", displayMatches);
+      searchInput.addEventListener("keyup", displayMatches);
     </script>
   </body>
 </html>
