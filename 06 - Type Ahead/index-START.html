@@ -1,22 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      function showCities(cities) {
+        const listContainer = document.querySelector(".suggestions");
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+        for (let i = 0; i < cities.length; i++) {
+          const nameBlock = document.createElement("li");
+          nameBlock.textContent = `${cities[i].city}, ${cities[i].state}`;
+          listContainer.appendChild(nameBlock);
+        }
+      }
 
-</script>
-</body>
+      const endpoint =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+
+      const requestURL =
+        "https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json";
+
+      //JSON을 가져오기 위해서는, XMLHttpRequest(XHR) API를 사용하면 된다.
+      const request = new XMLHttpRequest();
+      request.open("GET", endpoint);
+      request.responseType = "json";
+      request.send();
+      request.onload = function () {
+        const cities = request.response;
+        showCities(cities);
+      };
+    </script>
+  </body>
 </html>
