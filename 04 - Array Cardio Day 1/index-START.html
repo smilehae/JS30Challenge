@@ -82,12 +82,16 @@
       // Array.prototype.map()
       // 2. Give us an array of the inventors first and last names
       const names = inventors.map(function (inventor) {
-        let obj = {};
-        obj.first = inventor.first;
-        obj.last = inventor.last;
-        return obj;
+        //이건 객체로 값을 뽑는 방법
+        // let obj = {};
+        // obj.first = inventor.first;
+        // obj.last = inventor.last;
+        // return obj;
+
+        //이건 답지 : 이렇게 string 으로 이루어진 배열로 뽑을 수도 있다.
+        return `${inventor.first}, ${inventor.last}`;
       });
-      //      console.log(names);
+      // console.log(names);
 
       // Array.prototype.sort()
       // 3. Sort the inventors by birthdate, oldest to youngest
@@ -96,23 +100,26 @@
       inventors.sort(function (a, b) {
         return a.year - b.year;
       });
+
+      //답지 ) 3항연산자
+      // inventors.sort((a, b) => (a.year > b.year ? 1 : -1));
+      //a가 젋어? 그럼 1 (b먼저 옴) 아냐? 그럼 -1 (a 먼저옴) : 나이 든 사람 먼저!
       //console.log(inventors);
 
       // Array.prototype.reduce()
       // 4. How many years did all the inventors live all together?
       //객체의 reduce시 초기값 반드시 필요.
       //accumulator:더해지는 값 currentValue: 현재 배열위치의 값
-      let initialVal = 0;
       let sum = inventors.reduce(function (accumulator, currentValue) {
         return accumulator + (currentValue.passed - currentValue.year);
-      }, initialVal);
+      }, 0);
       //console.log(sum);
 
       // 5. Sort the inventors by years lived
       inventors.sort(function (a, b) {
         const ageA = a.passed - a.year;
         const ageB = b.passed - b.year;
-        return ageA - ageB;
+        return ageA > ageB ? -1 : 1;
       });
       const inventorAge = inventors.map(function (inventor) {
         const obj = {};
@@ -129,7 +136,7 @@
       const aList = document.querySelectorAll(".mw-category-group li a");
       //nodeList 상태 -> array
       const aArray = Array.from(aList);
-      //a가 들어있는 array. 여기서 innerHTML만 추출
+      //a가 들어있는 array. 여기서 innerHTML만 추출 : 여기서 객체만들어서 추출도 되지만, 어차피 innerHTML만 필요하니까 바로 return a.innerHTML도 가능
       const texts = aArray.map(function (a) {
         const obj = {};
         obj.text = a.innerHTML;
@@ -137,10 +144,17 @@
       });
       //여기서 de가 있는 것들만 남기기
       const ans = texts.filter((a) => a.text.includes("de"));
-      // console.log(aList);
-      // console.log(aArray);
-      // console.log(texts);
-      // console.log(ans);
+
+      console.log(ans);
+
+      //정답지의 짱짱한 풀이
+      //하나 선택한 것에 대해서 다시 querySelectorAll 등 가능
+      // const category = document.querySelector(".mw-category");
+      // const links = Array.from(category.querySelectorAll("a"));
+      // const de = links
+      //   .map((a) => a.textContent)
+      //   .filter((word) => word.includes("de"));
+      // console.log(de);
 
       // 7. sort Exercise
       // Sort the people alphabetically by last name
@@ -149,11 +163,16 @@
       const words = str.split(", ");
 
       people.sort(function (a, b) {
-        const word1 = a.split(", ");
-        const word2 = b.split(", ");
-        return word1[1].localeCompare(word2[1]);
+        // const word1 = a.split(", ");
+        // const word2 = b.split(", ");
+        // return word1[1] > word2[1] ? 1 : -1;
+
+        //     답지의 엄청난 풀이 : 구조분해!
+        const [aFirst, aLast] = a.split(", ");
+        const [bFirst, bLast] = b.split(", ");
+        return aLast > bLast ? 1 : -1;
       });
-      //console.log(people);
+      console.log(people);
       // 8. Reduce Exercise
       // Sum up the instances of each of these
       //인스턴스 셀때는, if(인스턴스 in 객체)를 애용하자.
