@@ -14,31 +14,53 @@
       </ul>
     </form>
     <script>
-      function showCities(cities) {
-        const listContainer = document.querySelector(".suggestions");
-
-        for (let i = 0; i < cities.length; i++) {
-          const nameBlock = document.createElement("li");
-          nameBlock.textContent = `${cities[i].city}, ${cities[i].state}`;
-          listContainer.appendChild(nameBlock);
-        }
-      }
-
       const endpoint =
         "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
 
-      const requestURL =
-        "https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json";
+      //미해의 시도
+      //  /   JSON을 가져오기 위해서는, XMLHttpRequest(XHR) API를 사용하면 된다.
+      // const request = new XMLHttpRequest();
+      // request.open("GET", endpoint);
+      // request.responseType = "json";
+      // request.send();
+      // request.onload = function () {
+      //   const cities = request.response;
+      //   input.addEventListener("input", filterCities(cities, "New"));
+      // };
 
-      //JSON을 가져오기 위해서는, XMLHttpRequest(XHR) API를 사용하면 된다.
-      const request = new XMLHttpRequest();
-      request.open("GET", endpoint);
-      request.responseType = "json";
-      request.send();
-      request.onload = function () {
-        const cities = request.response;
-        showCities(cities);
-      };
+      function filterCities(cities, str) {
+        const listContainer = document.querySelector(".suggestions");
+        const cityArr = Array.from(cities).filter(function (city) {
+          return city["city"].includes(str) || city["state"].includes(str);
+        });
+        console.log(cityArr);
+        const listTag = Array.from(document.querySelectorAll("li"));
+        listTag.forEach((element) => {
+          element.remove();
+        });
+
+        for (let i = 0; i < cityArr.length; i++) {
+          const nameBlock = document.createElement("li");
+          nameBlock.textContent = `${cityArr[i].city}, ${cityArr[i].state}`;
+          listContainer.appendChild(nameBlock);
+        }
+      }
+      /////////////////////////////////////////////////////////
+      //답 참고
+      //XMLHttpReqest의 대체제인 fetch API를 사용하였다.
+      //jQuery의 ajaz()와 다른 점 : fetch()에서 반환되는 promise객체는 http error을 reject 하지 않음. 대신 ok 상태가 false로 뜬다.
+      //또한 쿠키를 보내거나 받지 않는다.
+
+      //fetch 사용 흐름은, 특정 인수의 경로에 따라서 가져오고, 응답을 포함하는 약속(response)를 반환하는것.
+      const cities = [];
+      fetch(endpoint)
+        .then((blob) => blob.json())
+        .then((data) => cities.push(...data));
+
+      const input = document.querySelector(".search");
+      input.addEventListener("input", function () {
+        filterCities(cities, this.value);
+      });
     </script>
   </body>
 </html>
