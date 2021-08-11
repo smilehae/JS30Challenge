@@ -95,12 +95,50 @@
     </div>
 
     <script>
+      let prev = 1;
+      let next;
+      let isShiftClicked = false;
+
+      //체크박스를 가져와서 배열에 넣어준다.
       const boxes = Array.from(document.querySelectorAll(".item input"));
-      boxes.forEach(box =>{
-        box.addEventListener('click',function(){
-          console.log(this.)
-        })
-      })
+      //클릭할때, shift가 안눌린 상태면 prev에 눌린 상태면 next에 해당 number을 저장하고 이 사이를 checked 되게 만든다.
+      boxes.forEach((box) => {
+        box.addEventListener("click", function () {
+          if (!isShiftClicked) {
+            prev = Number(this.dataset.num);
+            console.log("this is " + prev);
+          } else {
+            next = Number(this.dataset.num);
+            console.log("this is last " + next);
+            boxes.forEach(function (box) {
+              if (
+                Number(box.dataset.num) > prev &&
+                Number(box.dataset.num) < next
+              ) {
+                if (box.checked === false) {
+                  box.checked = true;
+                }
+              }
+            });
+          }
+        });
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.keyCode === 16) {
+          if (!isShiftClicked) {
+            isShiftClicked = true;
+            //  console.log("shift clicked");
+          }
+        }
+      });
+      document.addEventListener("keyup", function (event) {
+        if (event.keyCode === 16) {
+          if (isShiftClicked) {
+            isShiftClicked = false;
+            //   console.log("shift cancled");
+          }
+        }
+      });
     </script>
   </body>
 </html>
