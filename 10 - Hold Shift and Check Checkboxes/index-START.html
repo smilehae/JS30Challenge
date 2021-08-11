@@ -100,29 +100,57 @@
       let isShiftClicked = false;
 
       //체크박스를 가져와서 배열에 넣어준다.
-      const boxes = Array.from(document.querySelectorAll(".item input"));
+      const boxes = document.querySelectorAll(".item input");
+
       //클릭할때, shift가 안눌린 상태면 prev에 눌린 상태면 next에 해당 number을 저장하고 이 사이를 checked 되게 만든다.
-      boxes.forEach((box) => {
-        box.addEventListener("click", function () {
-          if (!isShiftClicked) {
-            prev = Number(this.dataset.num);
-            console.log("this is " + prev);
-          } else {
-            next = Number(this.dataset.num);
-            console.log("this is last " + next);
-            boxes.forEach(function (box) {
-              if (
-                Number(box.dataset.num) > prev &&
-                Number(box.dataset.num) < next
-              ) {
-                if (box.checked === false) {
-                  box.checked = true;
-                }
+
+      function checkingByNum(e) {
+        console.log(e); //딱 눌렀을때의 이벤트 : pointerEvent
+        console.log(this); //닥 눌러진 태그 (객체)
+        if (!isShiftClicked) {
+          prev = Number(this.dataset.num);
+          console.log("this is " + prev);
+        } else {
+          next = Number(this.dataset.num);
+          console.log("this is last " + next);
+          boxes.forEach(function (box) {
+            if (
+              Number(box.dataset.num) > prev &&
+              Number(box.dataset.num) < next
+            ) {
+              if (box.checked === false) {
+                box.checked = true;
               }
-            });
-          }
-        });
+            }
+          });
+        }
+      }
+
+      //원래 코드엔, keydown과 keyup을 통해서 shift가 눌렸는지 여부를 판단했다. 하지만 사실 addEventListner의 매개변수 e 안에 shiftKey라는 특성이 들어있어서 눌렸는지 여부를 바로 알 수 있다..!
+      //그래서 변경해본 함수
+
+      let lastChecked;
+      let isBetween = false;
+      function boxChecking(e) {
+        if (e.shiftKey === true && this.checked) {
+          //console.log(this.checked); //체크박스를 누르는 순간 checked가 되기 때문에, 이렇게 찍히는 순간은 그 뒤임. 따라서 처음 체크하는 순간을 의미.
+          boxes.forEach((box) => {
+            if (box === this || box === lastChecked) {
+              isBetween = !isBetween;
+              console.log(isBetween);
+            }
+            if (isBetween) {
+              box.checked = true;
+            }
+          });
+        }
+        lastChecked = this;
+      }
+
+      boxes.forEach((box) => {
+        box.addEventListener("click", boxChecking);
       });
+
       document.addEventListener("keydown", function (event) {
         if (event.keyCode === 16) {
           if (!isShiftClicked) {
