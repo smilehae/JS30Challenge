@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Reference VS Copy</title>
+  </head>
+  <body>
+    <script>
+      let age = 100;
+      let age2 = age;
+      age = 200;
+      console.log(age, age2);
+
+      let name = "mihae";
+      let name2 = name;
+      name = "haerin";
+      console.log(name, name2);
+
+      const players = ["Wes", "Sarah", "Ryan", "Poppy"];
+
+      //teams에 players의 주소가 저장. ( 같이 바뀜)
+      const teams = players;
+      teams[2] = "mihae";
+      console.log(players);
+
+      //그렇다면 어떻게 바꿔?
+      const teams2 = Array.from(players);
+      teams2[2] = "jonghae";
+      console.log(teams2, players);
+
+      const teams3 = players.slice();
+      teams3[1] = "hahae";
+      console.log(teams3, players);
+
+      const teams4 = [].concat(players);
+      teams4[1] = "haedal";
+      console.log(teams4, players);
+
+      const teams5 = [...players];
+      teams5[3] = "haegong";
+      console.log(teams5, players);
+
+      //객체는?
+      const person = {
+        name: "mihae",
+        age: 23,
+      };
+      //그냥 = 하면 주소만 바뀜
+      const captain = person;
+      captain.age = 30;
+      console.log(person, captain);
+
+      //그럼 어떻게 해?
+      //Object.assign 이용 (빈객체, 복사해올객체, 바꿀 내용)
+      const captain2 = Object.assign({}, person, { name: "haerin", age: 23 });
+      console.log(person, captain2);
+
+      //구조분해 이용
+      const captain3 = { ...person };
+      captain3.age = 25;
+      console.log(person, captain3);
+
+      //객체 가져올때 주의할 점 : one level copy밖에 안된다. 객체 안의 객체의 내용을 바꾸면 원본도 같이 바뀌어 버린다. ㅠㅠ
+
+      const mihae = {
+        name: "mihae",
+        age: 23,
+        social: {
+          twitter: "@mihae",
+          github: "@smilehae",
+        },
+      };
+
+      // const dev = Object.assign({}, mihae);\
+      const dev = { ...mihae };
+      console.log(dev);
+      dev.social.twitter = "@haerin";
+      console.log(dev, mihae);
+
+      //이걸 해결하려면 deep clone을 보는게 좋아!
+      //간단하게 해결하려면 stringfy하고 parse해서 연결고리를 끊으면 됨
+      const dev2 = JSON.parse(JSON.stringify(mihae));
+      dev2.social.twitter = "@haehae";
+      console.log(dev2, mihae);
+    </script>
+  </body>
+</html>

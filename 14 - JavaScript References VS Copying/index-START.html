@@ -1,56 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>JS Reference VS Copy</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Reference VS Copy</title>
+  </head>
+  <body>
+    <script>
+      // start with strings, numbers and booleans
+      //number과 string에서는 값이 복사되어서 들어간다.
+      let age = 100;
+      let age2 = age;
+      console.log(age, age2);
+      age = 200;
+      console.log(age, age2);
 
-  <script>
-    // start with strings, numbers and booleans
+      let name = "wes";
+      let name2 = name;
+      console.log(name, name2);
+      name = "wesly";
+      console.log(name, name2);
 
-    // Let's say we have an array
-    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+      // Let's say we have an array
+      const players = ["Wes", "Sarah", "Ryan", "Poppy"];
 
-    // and we want to make a copy of it.
+      // and we want to make a copy of it.
+      const team = players;
+      console.log(players, team);
+      // You might think we can just do something like this:
 
-    // You might think we can just do something like this:
+      //team[3] = "Lux";
+      // however what happens when we update that array?
+      //team을 업데이트 했는데, 이건 player의 reference일 뿐이다. 따라서 player도 업데이트 되게 된다.
 
-    // however what happens when we update that array?
+      // now here is the problem!
 
-    // now here is the problem!
+      // oh no - we have edited the original array too!
 
-    // oh no - we have edited the original array too!
+      // Why? It's because that is an array reference, not an array copy. They both point to the same array!
 
-    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+      // So, how do we fix this? We take a copy instead!
 
-    // So, how do we fix this? We take a copy instead!
+      // one way
+      const team2 = players.slice();
 
-    // one way
+      // or create a new array and concat the old one in
+      const team3 = [].concat(players); //빈 array에 player꺼 다 붙이기
 
-    // or create a new array and concat the old one in
+      // or use the new ES6 Spread
+      const team4 = [...players]; //spread : iterable의 요소를 하나씩 꺼내주는 것
+      team4[3] = "heee hawww";
 
-    // or use the new ES6 Spread
+      const teams5 = Array.from(players);
 
-    // now when we update it, the original one isn't changed
+      // now when we update it, the original one isn't changed
 
-    // The same thing goes for objects, let's say we have a person object
+      // The same thing goes for objects, let's say we have a person object
 
-    // with Objects
-    const person = {
-      name: 'Wes Bos',
-      age: 80
-    };
+      // with Objects
+      const person = {
+        name: "Wes Bos",
+        age: 80,
+      };
 
-    // and think we make a copy:
+      // and think we make a copy:
+      // const captain = person;
+      // captain.number = 99;
 
-    // how do we take a copy instead?
+      // how do we take a copy instead?
+      const captain2 = Object.assign({}, person, { number: 99, age: 12 });
 
-    // We will hopefully soon see the object ...spread
+      // We will hopefully soon see the object ...spread
+      const cap3 = { ...person };
+      // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+      //이게 무슨 뜻이냐면, 1 level deep- 객체 안의 내용에 대해서는 완전 독립적 copy가 가능하고 바꿔도 영향이 없는데, 객체 안의 객체에 대해서는 복사한 객체의 값을 바꾸면 원본의 값도 바꿔버린 다는 것이다. 이것을 'shallow copy ' 라고 부르시더라. 진짜 레벨마다 copy를 원하다면 deep clone 등을 찾아봐야 한다고 한다.
 
-    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+      const wes = {
+        name: "wes",
+        age: 100,
+        social: {
+          twitter: "@wesbos",
+          facebook: "wesbos.developer",
+        },
+      };
+      //console.clear();
+      console.log(wes);
 
-  </script>
+      const dev = Object.assign({}, wes);
 
-</body>
+      //정 객체를 복사해야하면 이렇게 하면 된다고 한다. : 더이상 객체가 아니고 string으로 바꾸고 그랬으니까 모든 관계가 사라진다.
+      const dev2 = JSON.parse(JSON.stringify(person));
+    </script>
+  </body>
 </html>
