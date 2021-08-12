@@ -51,12 +51,18 @@
         <input type="text" name="item" placeholder="Item Name" required />
         <input type="submit" value="+ Add Item" />
       </form>
+      <div class="myContainer">
+        <button class="mybtn" data-role="delete">Delete All</button>
+        <button class="mybtn" data-role="uncheck">Uncheck All</button>
+        <button class="mybtn" data-role="check">Check All</button>
+      </div>
     </div>
 
     <script>
       const addItems = document.querySelector(".add-items");
-      const itemsList = document.querySelector(".plates"); //ul
-      const items = JSON.parse(localStorage.getItem("items")) || [];
+      const itemsList = document.querySelector(".plates");
+      let items = JSON.parse(localStorage.getItem("items")) || [];
+      const buttons = document.querySelectorAll(".mybtn");
 
       function addItem(e) {
         e.preventDefault(); //default는 페이지를 외부 소스로 보내줌 (서버사이드 등. 그래서 이런 default를 막아주는것.)
@@ -99,13 +105,24 @@
         if (!e.target.matches("input")) return;
         const index = e.target.dataset.index;
         items[index].done = !items[index].done;
-        localStorage.setItem("items", items);
+        localStorage.setItem("items", JSON.stringify(items));
         populateList(items, itemsList);
+      }
+
+      function handleclick(e) {
+        const role = e.target.dataset.role;
+        if (role === "delete") {
+          items = [];
+          localStorage.setItem("items", JSON.stringify(items));
+          populateList(items, itemsList);
+        }
       }
 
       addItems.addEventListener("submit", addItem);
       itemsList.addEventListener("click", toggleDone);
-
+      buttons.forEach((button) =>
+        button.addEventListener("click", handleclick)
+      );
       populateList(items, itemsList);
     </script>
   </body>
