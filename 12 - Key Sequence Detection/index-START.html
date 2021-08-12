@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Key Detection</title>
-  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
-</head>
-<body>
-<script>
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+    <script
+      type="text/javascript"
+      src="https://www.cornify.com/js/cornify.js"
+    ></script>
+  </head>
+  <body>
+    <script>
+      const pressed = [];
+      const secretCode = "admin";
+      window.addEventListener("keyup", (e) => {
+        console.log(e.key);
+        pressed.push(e.key);
+        //splice(시작 위치, 삭제 갯수, 추가 내용)
+        // 시작 위치가 음수일 경우 끝부터 셈. -n일 경우 요소 끝의 n번째 요소. array.length-n 의 위치
+        //
+        pressed.splice(0, pressed.length - secretCode.length);
+        //join을 통해서 array의 각 char들을 하나의 string으로 만들어준다.
+        if (pressed.join("").includes(secretCode)) {
+          console.log("Ding Ding!");
+          cornify_add();
+        }
+        console.log(pressed);
+      });
+    </script>
+  </body>
 </html>

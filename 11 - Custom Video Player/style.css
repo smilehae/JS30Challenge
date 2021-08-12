@@ -71,7 +71,7 @@ body {
   bottom: 0;
   width: 100%;
   transform: translateY(100%) translateY(-5px);
-  transition: all 0.3s;
+  transition: all 0.3s; /*이거 있어서 부드럽게 올라감*/
   flex-wrap: wrap;
   background: rgba(0, 0, 0, 0.1);
 }
