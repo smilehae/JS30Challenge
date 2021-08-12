@@ -113,9 +113,18 @@
         const role = e.target.dataset.role;
         if (role === "delete") {
           items = [];
-          localStorage.setItem("items", JSON.stringify(items));
-          populateList(items, itemsList);
+        } else if (role === "check") {
+          items.forEach((item) => {
+            if (item.done === false) item.done = true;
+          });
+        } else if (role === "uncheck") {
+          items.forEach((item) => {
+            if (item.done === true) item.done = false;
+          });
         }
+
+        localStorage.setItem("items", JSON.stringify(items));
+        populateList(items, itemsList);
       }
 
       addItems.addEventListener("submit", addItem);
