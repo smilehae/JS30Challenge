@@ -49,3 +49,14 @@ myVideo.addEventListener("timeupdate", function () {
   console.log(barRatio);
   progressContent.style.flexBasis = `${barRatio}%`;
 });
+
+let isDown = false;
+progress.addEventListener("mousedown", () => (isDown = true));
+progress.addEventListener("mousemove", (e) => {
+  if (isDown) {
+    myVideo.currentTime = e.offsetX;
+  }
+});
+progress.addEventListener("mouseup", (e) => {
+  isDown = false;
+});
