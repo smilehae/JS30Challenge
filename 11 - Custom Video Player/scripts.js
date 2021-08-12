@@ -14,15 +14,19 @@ myVideo.addEventListener("loadedmetadata", function () {
   durationTime = myVideo.duration;
 });
 
-playBtn.addEventListener("click", function (e) {
-  if (myVideo.paused) {
-    myVideo.play();
-    this.innerHTML = "❚❚";
-  } else {
-    myVideo.pause();
-    this.innerHTML = "►";
-  }
-});
+function togglePlay() {
+  myVideo.paused ? myVideo.play() : myVideo.pause();
+}
+
+function toggleBtn() {
+  playBtn.textContent = !myVideo.paused ? "❚❚" : "►";
+}
+
+myVideo.addEventListener("click", togglePlay);
+playBtn.addEventListener("click", togglePlay);
+
+myVideo.addEventListener("play", toggleBtn);
+myVideo.addEventListener("pause", toggleBtn);
 
 volumeRange.addEventListener("input", function () {
   myVideo.volume = this.value;
