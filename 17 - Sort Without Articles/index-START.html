@@ -89,6 +89,18 @@
           .join("");
       }
 
+      //강사님의 풀이 : 한줄로 끝내준다..!
+      //replace:  패턴이 일치하도록 교체 후 반환.
+      // 정규식이 들어왔는데, /규칙/규칙 이렇게 써주면 됨
+      // /^는 처음에 매칭이라는 뜻 /i는 대소문자 구별 안함   /i가 있으면 대소문자 상관 없음
+      //trim은 양긑의 모든 공백 제거
+      function strip(bandName) {
+        return bandName.replace(/^(a |the |an )/i, "").trim();
+      }
+
+      //각 문장에서 A, An, The 뺀 것 기준으로 비교
+      const sortedBands = bands.sort((a, b) => (strip(a) > strip(b) ? 1 : -1));
+
       console.log(bands);
 
       showContainer(bands);
