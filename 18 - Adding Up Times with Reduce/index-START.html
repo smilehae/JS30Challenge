@@ -68,6 +68,8 @@
     <script>
       //위 시간들은, 여러 동영상을 묶어서 유튜브에 올린다고 할때, 재생목록의 동영상 각각의 시간이다.
       //각 시간들을 minute, second로 나누고, 총 시간이 얼만큼인지 콘솔에 출력하기
+
+      //1. 기본 버전
       let totalMin = 0;
       let totalSec = 0;
       let totalHour = 0;
@@ -91,6 +93,52 @@
       totalMin = totalMin % 60;
 
       console.log(totalHour + ":" + totalMin + ":" + totalSec);
+
+      /////////////////////////////////////////////////
+
+      //2. 강사님 버전
+      const time3 = [...document.querySelectorAll("[data-time]")];
+      const seconds = time3
+        .map((time) => time.dataset.time)
+        .map((timeCode) => {
+          const [mins, secs] = timeCode.split(":").map(parseFloat);
+          return mins * 60 + secs;
+          console.log(mins, secs);
+        })
+        .reduce((total, vidSec) => total + vidSec);
+
+      let secondsLeft = seconds;
+      const hours = Math.floor(secondsLeft / 3600);
+      secondsLeft = secondsLeft % 3600;
+      const minutes = Math.floor(secondsLeft / 60);
+      secondsLeft = secondsLeft % 60;
+      console.log(hours + ":" + minutes + ":" + secondsLeft);
+
+      //3. 강사님 버전 복습
+      const mytimes = Array.from(document.querySelectorAll("[data-time]"));
+      const myseconds = mytimes
+        .map((mytime) => mytime.dataset.time)
+        .map((vidTime) => {
+          const [min, sec] = vidTime.split(":").map(parseFloat);
+          return min * 60 + sec;
+        })
+        .reduce((total, curTime) => total + curTime);
+
+      //이렇게 한줄로 해결도 가능
+      // const finalSec = mytimes.reduce((total, curTime) => {
+      //   const time = curTime.dataset.time;
+      //   const [min, sec] = time.split(":").map(parseFloat);
+      //   return (total += min * 60 + sec);
+      // }, 0);
+      // console.log(finalSec);
+
+      let tSec = myseconds;
+      const tHour = Math.floor(tSec / 3600);
+      tSec = tSec % 3600;
+      const tMin = Math.floor(tSec / 60);
+      tSec = tSec % 60;
+
+      console.log(tHour + ":" + tMin + ":" + tSec);
     </script>
   </body>
 </html>
