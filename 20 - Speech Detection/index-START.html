@@ -23,19 +23,22 @@
       //말이 들릴때까지 기다렸다가, 작동함
       recognition.addEventListener("result", (e) => {
         const transcript = Array.from(e.results)
-          .map((result) => result[0])
-          .map((result) => result.transcript)
+          .map((result) => result[0].transcript)
           .join("");
 
+        console.log(transcript);
+
+        console.log(p);
         p.textContent = transcript;
+
+        if (transcript.includes("윙가르디움 레비오우사")) {
+          console.log("주문 완료");
+        }
+
         if (e.results[0].isFinal) {
           p = document.createElement("p");
           words.appendChild(p);
         }
-        if (transcript.includes("Hello")) {
-          console.log("welcome, administrator");
-        }
-        console.log(transcript);
       });
 
       recognition.addEventListener("end", recognition.start);
