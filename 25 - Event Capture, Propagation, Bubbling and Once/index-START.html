@@ -1,48 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Understanding JavaScript's Capture</title>
-</head>
-<body class="bod">
-
-  <div class="one">
-    <div class="two">
-      <div class="three">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Understanding JavaScript's Capture</title>
+  </head>
+  <body class="bod">
+    <div class="one">
+      <div class="two">
+        <div class="three"></div>
       </div>
     </div>
-  </div>
 
-<style>
-  html {
-    box-sizing: border-box;
-  }
-  
-  *, *:before, *:after { 
-    box-sizing: inherit; 
-  }
+    <style>
+      html {
+        box-sizing: border-box;
+      }
 
-  div {
-    width: 100%;
-    padding: 100px;
-  }
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
 
-  .one {
-    background: thistle;
-  }
+      div {
+        width: 100%;
+        padding: 100px;
+      }
 
-  .two {
-    background: mistyrose;
-  }
+      .one {
+        background: thistle;
+      }
 
-  .three {
-    background: coral;
-  }
-</style>
+      .two {
+        background: mistyrose;
+      }
 
-<button></button>
-<script>
+      .three {
+        background: coral;
+      }
+    </style>
 
-</script>
-</body>
+    <button>hi</button>
+    <script>
+      const divs = document.querySelectorAll("div");
+      const button = document.querySelector("button");
+
+      function logText(e) {
+        //DomTocken List가 this.classList에 들어있고, value하면 classList의 값들이 한칸씩 띄고 들어가 있음.
+        console.log(this.classList.value);
+
+        //이걸 넣으면, 가장 아래꺼를 실행 한 후에, bubbleing 하는 걸 멈추렴! 이라는 뜻
+        //capture이 true일 경우 가장 위에것만 캡쳐
+        e.stopPropagation();
+      }
+
+      function doOnce(e) {
+        console.log(this.textContent);
+      }
+
+      //이렇게 하고 three부분을 누르면, three two one이 전부 다 나온다.
+      //three부분을 눌렀지만 그부분은 동시에 two one 브라우저 등등의 위치도 눌렀기 때문이다. 이걸 bubbling이라고 한다.
+      //하나씩 줌아웃되면서 클릭이 전부 트리거 된다.
+      //특정 위치의 element를 누르면 top down하면서 이벤트들을 캡쳐하고, 가장 마지막에 캡쳐한 것부터 하나씩 실행된다 (bubble up)
+      //capture:true를 넣으면 가장 위부터 실행된다. 보통은 false.
+      //once:true를 넣으면, 한번 실행된 후에 해당 이벤트를 삭제하라는 뜻이다. 즉 해당 기능을 'unbind'시킬 수 있다.
+
+      divs.forEach((div) =>
+        div.addEventListener("click", logText, {
+          capture: false,
+          once: true,
+        })
+      );
+      button.addEventListener("click", doOnce, {
+        once: true,
+      });
+    </script>
+  </body>
 </html>
