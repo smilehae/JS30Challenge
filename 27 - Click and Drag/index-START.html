@@ -44,7 +44,10 @@
       slider.addEventListener("mousedown", (e) => {
         isDown = true;
         slider.classList.add("active");
+        scrollLeft = slider.scrollLeft;
+        //시작 위치(슬라이더 안에서의 위치) : 페이지에서의 위치 - 컨테이너가 왼쪽으로 떨어진 정도
         startX = e.pageX - slider.offsetLeft;
+        // console.log(e);
       });
       slider.addEventListener("mouseleave", () => {
         isDown = false;
@@ -56,9 +59,12 @@
       });
       slider.addEventListener("mousemove", (e) => {
         if (!isDown) return;
-        scrollLeft = startX - e.pageX;
-        console.log(scrollLeft);
-        window.scrollBy(scrollLeft, 0);
+        //쓸데없는 기능이 실행되는 것을 막아줌.
+        e.preventDefault();
+        //현재 누른 위치에서 처음 눌린 위치 빼기 에서 scrollLeft만큼 더 빼기
+        const x = e.pageX - slider.offsetLeft;
+        const walk = x - startX;
+        slider.scrollLeft = scrollLeft - walk;
       });
     </script>
   </body>

@@ -22,6 +22,7 @@ body {
 
 .items {
   height: 800px;
+  max-width: 70%;
   padding: 100px;
   width: 100%;
   border: 1px solid white;
