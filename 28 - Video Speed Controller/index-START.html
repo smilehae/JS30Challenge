@@ -28,12 +28,22 @@
       function changeVal(e) {
         //처음값 0.42 나중 값 4
         const speedHeight = speed.offsetHeight;
-        const percentage = 0.02 + e.offsetY / speed.offsetHeight;
-        const val = (percentage * 4).toFixed(2);
 
-        bar.style.height = `${percentage * 100}%`;
-        bar.textContent = `${val}x`;
-        video.playbackRate = val;
+        //이거랑 offsetY가 같다.
+        //const y = e.pageY - speed.offsetTop;
+
+        const percentage = e.offsetY / speed.offsetHeight;
+
+        //min이랑 max를 따로 정의해두면 나중에 값 바꾸기 용이하다
+        const min = 0.4;
+        const max = 4;
+
+        const height = Math.round(percentage * 100) + "%";
+        const playbackRate = (min + percentage * (max - min)).toFixed(2);
+
+        bar.style.height = height;
+        bar.textContent = `${playbackRate}x`;
+        video.playbackRate = playbackRate;
       }
       speed.addEventListener("mousemove", changeVal);
     </script>
