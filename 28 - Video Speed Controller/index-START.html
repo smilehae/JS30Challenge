@@ -1,20 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Video Speed Scrubber</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <div class="wrapper">
-    <video class="flex" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" loop controls></video>
-    <div class="speed">
-      <div class="speed-bar">1×</div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Video Speed Scrubber</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <video
+        class="flex"
+        width="765"
+        height="430"
+        src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4"
+        loop
+        controls
+      ></video>
+      <div class="speed">
+        <div class="speed-bar">1×</div>
+      </div>
     </div>
-  </div>
 
-<script>
-</script>
-</body>
+    <script>
+      const speed = document.querySelector(".speed");
+      const bar = document.querySelector(".speed-bar");
+      const video = document.querySelector(".flex");
+
+      function changeVal(e) {
+        //처음값 0.42 나중 값 4
+        const speedHeight = speed.offsetHeight;
+        const percentage = 0.02 + e.offsetY / speed.offsetHeight;
+        const val = (percentage * 4).toFixed(2);
+
+        bar.style.height = `${percentage * 100}%`;
+        bar.textContent = `${val}x`;
+        video.playbackRate = val;
+      }
+      speed.addEventListener("mousemove", changeVal);
+    </script>
+  </body>
 </html>
