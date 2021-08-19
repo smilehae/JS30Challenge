@@ -18,7 +18,13 @@
     <style>
       html {
         /* background: #018ded url(https://unsplash.it/1500/1000?image=881&blur=5); */
-        background-color: rgba(37, 62, 85, 0.555);
+        /* background-color: rgba(37, 62, 85, 0.555); */
+        background: linear-gradient(
+          45deg,
+          rgba(128, 128, 128, 0.548),
+          rgb(158, 158, 255),
+          rgba(135, 207, 235, 0.815)
+        );
         background-size: cover;
         font-family: "helvetica neue";
         text-align: center;
@@ -85,38 +91,35 @@
     </style>
 
     <script>
-      const hand = document.querySelectorAll(".hand");
-      const handArr = Array.from(hand);
-      for (let h of handArr) {
-        h.style.transformOrigin = "top right";
-      }
+      const hands = document.querySelectorAll(".hand");
 
       const hourHand = document.querySelector(".hour-hand");
       const minHand = document.querySelector(".min-hand");
       const secHand = document.querySelector(".second-hand");
 
-      const moveHand = function (hand, deg) {
+      hands.forEach((hand) => {
+        hand.style.transformOrigin = "top right";
+      });
+
+      function moveHand(hand, deg) {
         hand.style.transform = `rotate(${deg}deg)`;
-      };
+      }
 
-      setInterval(function () {
-        const date = new Date();
-        const hour = date.getHours();
-        const minute = date.getMinutes();
-        const second = date.getSeconds();
-        console.log(hour, minute, second);
+      setInterval(() => {
+        const today = new Date();
+        let hour = today.getHours();
+        let min = today.getMinutes();
+        let sec = today.getSeconds();
 
-        //hour 0시 : 90도 3시 180도. -> 1시간에 30도. 시작 +90도
-        const hourR = hour * 30 + 90;
-        moveHand(hourHand, hourR);
+        //총 12시간이니까 1시간당 30도 총 60분 이니까 1분당 6도
+        //60초
+        hour = (hour * 30 + 90) % 360;
+        min = (min * 6 + 90) % 360;
+        sec = (sec * 6 + 90) % 360;
 
-        //minute : 0도 0분 90도 15분. -> 1분당 6도
-        const minR = minute * 6 + 90;
-        moveHand(minHand, minR);
-
-        //second : 0도 0초 90도 15초.
-        const secR = second * 6 + 90;
-        moveHand(secHand, secR);
+        moveHand(hourHand, hour);
+        moveHand(minHand, min);
+        moveHand(secHand, sec);
       }, 1000);
     </script>
   </body>
