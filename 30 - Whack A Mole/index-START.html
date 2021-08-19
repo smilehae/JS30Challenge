@@ -15,6 +15,7 @@
     <h3>
       <span class="time-score">Time Left</span>
       <span class="time-left">10</span>
+      <span class="username"></span>
     </h3>
     <button onClick="startGame()">Start!</button>
 
@@ -49,6 +50,7 @@
       const timeDisplay = document.querySelector(".time-left");
       const playTime = 10;
       const textDisplay = document.querySelector(".time-score");
+      const userDisplay = document.querySelector(".username");
 
       let lastHole;
       let timeUp = false;
@@ -103,11 +105,17 @@
         }, 1000);
       }
 
-      function startGame() {
+      function resetGame() {
+        userDisplay.style.display = "none";
+        textDisplay.textContent = "time left";
         scoreBoard.textContent = 0;
         timeUp = false;
         score = 0;
         timeLeft = playTime;
+      }
+
+      function startGame() {
+        resetGame();
         timer(timeLeft);
         peep();
         setTimeout(() => {
@@ -125,18 +133,25 @@
         }
       }
 
+      userDisplay.textContent = `By mihae`;
+
       function finishGame() {
         clearInterval(timerInterval);
-        //지금 나온 점수 저장
         let bestScore = localStorage.getItem("score") || 0;
-        console.log(bestScore);
+        let name = localStorage.getItem("name") || "no one";
         if (Number(bestScore) < score) {
-          localStorage.setItem("score", `${score}`);
-          console.log(bestScore, score);
-          bestScore = score;
+          const answer = confirm("최고 점수 갱신! 기록을 저장하시겠습니까? ");
+          if (answer) {
+            name = prompt("기록할 닉네임을 영어로 입력해주세요.") || "unknown";
+            localStorage.setItem("score", `${score}`);
+            bestScore = score;
+            localStorage.setItem("name", name);
+          }
         }
         textDisplay.textContent = "Best Score";
         timeDisplay.textContent = bestScore;
+        userDisplay.style.display = "inline";
+        userDisplay.textContent = `By ${name}`;
       }
 
       //isTrusted 라는게 e에 들어있는데, 내가 직접 누루지 않고 js 조사해서 치면 저게 false가 된다.
