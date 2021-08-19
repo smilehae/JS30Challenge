@@ -1,23 +1,38 @@
-document.addEventListener("keydown", function (event) {
-  if (
-    event.keyCode == 65 ||
-    event.keyCode == 83 ||
-    event.keyCode == 68 ||
-    (event.keyCode >= 70 && event.keyCode <= 72) ||
-    (event.keyCode >= 74 && event.keyCode <= 76)
-  ) {
-    const key = document.querySelectorAll(`[data-key='${event.keyCode}']`);
-    const audio = key[1];
-    audio.load();
-    audio.play();
-    //   const cloneAudio = audio.cloneNode();
-    //   cloneAudio.play();
-    //   cloneAudio.remove();
+// document.addEventListener("keydown", function (event) {
+//   if (
+//     event.keyCode == 65 ||
+//     event.keyCode == 83 ||
+//     event.keyCode == 68 ||
+//     (event.keyCode >= 70 && event.keyCode <= 72) ||
+//     (event.keyCode >= 74 && event.keyCode <= 76)
+//   ) {
+//     const key = document.querySelectorAll(`[data-key='${event.keyCode}']`);
+//     const audio = key[1];
+//     audio.load();
+//     audio.play();
+//     //   const cloneAudio = audio.cloneNode();
+//     //   cloneAudio.play();
+//     //   cloneAudio.remove();
 
-    key[0].classList.add("playing");
-    window.setTimeout(function () {
-      key[0].classList.remove("playing");
+//     key[0].classList.add("playing");
+//     window.setTimeout(function () {
+//       key[0].classList.remove("playing");
+//     }, 100);
+//   }
+// });
+
+document.addEventListener("keydown", function (e) {
+  const keyCode = e.keyCode;
+  const selectKey = document.querySelector(`[data-key='${keyCode}']`);
+  if (selectKey != null) {
+    const selectAudio = document.querySelector(`audio[data-key='${keyCode}']`);
+    selectKey.classList.add("playing");
+    setTimeout(() => {
+      selectKey.classList.remove("playing");
     }, 100);
+
+    selectAudio.load();
+    selectAudio.play();
   }
 });
 

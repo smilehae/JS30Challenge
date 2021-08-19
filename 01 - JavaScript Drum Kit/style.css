@@ -14,13 +14,15 @@ html {
 .keys {
   display: flex;
   flex: 1;
+  flex-direction: row;
+
   min-height: 100vh;
   align-items: center;
   justify-content: center;
 }
 
 .key {
-  border: 0.4rem solid black;
+  /* border: 0.4rem solid black;
   border-radius: 0.5rem;
   margin: 1rem;
   font-size: 1.5rem;
@@ -30,7 +32,18 @@ html {
   text-align: center;
   color: white;
   background: rgba(0, 0, 0, 0.4);
-  text-shadow: 0 0 0.5rem black;
+  text-shadow: 0 0 0.5rem black; */
+  border: 0.4rem solid black;
+  margin: 1rem;
+  padding: 1rem 0.5rem;
+  border-radius: 0.5rem;
+  color: white;
+  text-align: center;
+  font-size: 1.5rem;
+  width: 10rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: all 0.07s ease;
+  text-shadow: 0 0 0.5rem rgb(243, 255, 174);
 }
 
 .playing {
