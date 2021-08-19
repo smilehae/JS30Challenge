@@ -112,9 +112,7 @@
         peep();
         setTimeout(() => {
           timeUp = true;
-          clearInterval(timerInterval);
-          textDisplay.textContent = "Best Score";
-          timeDisplay.textContent = score;
+          finishGame();
         }, playTime * 1000);
       }
 
@@ -125,6 +123,20 @@
           this.classList.remove("up");
           scoreBoard.textContent = score;
         }
+      }
+
+      function finishGame() {
+        clearInterval(timerInterval);
+        //지금 나온 점수 저장
+        let bestScore = localStorage.getItem("score") || 0;
+        console.log(bestScore);
+        if (Number(bestScore) < score) {
+          localStorage.setItem("score", `${score}`);
+          console.log(bestScore, score);
+          bestScore = score;
+        }
+        textDisplay.textContent = "Best Score";
+        timeDisplay.textContent = bestScore;
       }
 
       //isTrusted 라는게 e에 들어있는데, 내가 직접 누루지 않고 js 조사해서 치면 저게 false가 된다.
