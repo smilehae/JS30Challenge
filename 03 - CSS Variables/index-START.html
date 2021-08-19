@@ -64,38 +64,31 @@
     </style>
 
     <script>
-      const changeColor = function (color) {
-        const hl = document.querySelector(".hl");
-        const img = document.querySelector("img");
-        img.style.backgroundColor = color;
-        hl.style.color = color;
-      };
+      const spacingInput = document.querySelector("#spacing");
+      const blurInput = document.querySelector("#blur");
+      const colorInput = document.querySelector("#base");
+      const img = document.querySelector("img");
+      console.log(img);
+      console.log(spacingInput, blurInput, colorInput);
 
-      const changeSpace = function (space) {
-        const img = document.querySelector("img");
-        img.style.padding = space + "px";
-      };
+      function handleSpacing() {
+        img.style.padding = `${this.value}${this.dataset.sizing}`;
+      }
 
-      const changeBlur = function (blur) {
-        const img = document.querySelector("img");
-        img.style.filter = `blur(${blur}px)`;
-      };
+      function handleBlur() {
+        img.style.filter = `blur(${this.value}${this.dataset.sizing})`;
+      }
 
-      const spacing = document.getElementById("spacing");
-      spacing.addEventListener("input", function () {
-        changeSpace(`${this.value}`);
+      function changeColor() {
         console.log(this.value);
-      });
+        const h1 = document.querySelector(".hl");
+        h1.style.color = this.value;
+        img.style.backgroundColor = `${this.value}`;
+      }
 
-      const base = document.getElementById("base");
-      base.addEventListener("input", function (event) {
-        changeColor(`${this.value}`);
-      });
-
-      const blur = document.getElementById("blur");
-      blur.addEventListener("input", function () {
-        changeBlur(this.value);
-      });
+      spacingInput.addEventListener("input", handleSpacing);
+      blurInput.addEventListener("input", handleBlur);
+      colorInput.addEventListener("input", changeColor);
     </script>
   </body>
 </html>
