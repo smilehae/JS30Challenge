@@ -12,7 +12,10 @@
   </head>
   <body>
     <h1>Whack-a-mole! <span class="score">0</span></h1>
-    <h3>Time Left <span class="time-left">10</span></h3>
+    <h3>
+      <span class="time-score">Time Left</span>
+      <span class="time-left">10</span>
+    </h3>
     <button onClick="startGame()">Start!</button>
 
     <div class="game">
@@ -43,11 +46,15 @@
       const holes = document.querySelectorAll(".hole");
       const scoreBoard = document.querySelector(".score");
       const moles = document.querySelectorAll(".mole");
+      const timeDisplay = document.querySelector(".time-left");
+      const playTime = 10;
+      const textDisplay = document.querySelector(".time-score");
 
       let lastHole;
       let timeUp = false;
       let score;
-      let timeLeft = 10;
+      let timeLeft = playTime;
+      let timerInterval;
 
       function randTime(min, max) {
         return Math.round(Math.random() * (max - min) + min);
@@ -64,31 +71,60 @@
         return hole;
       }
 
+      function displayTime(time = 0) {
+        if (time < 5) {
+          timeDisplay.style.color = "red";
+        } else {
+          timeDisplay.style.color = "rgb(192, 81, 81)";
+        }
+        timeDisplay.textContent = time;
+      }
+
       function peep() {
         const time = randTime(200, 1000);
         const hole = randomHole(holes);
         hole.classList.add("up");
         setTimeout(() => {
           hole.classList.remove("up");
+
           if (!timeUp) peep();
         }, time);
+      }
+
+      function timer(time) {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            return;
+          }
+          timeLeft--;
+          displayTime(timeLeft);
+        }, 1000);
       }
 
       function startGame() {
         scoreBoard.textContent = 0;
         timeUp = false;
         score = 0;
+        timeLeft = playTime;
+        timer(timeLeft);
         peep();
         setTimeout(() => {
           timeUp = true;
-        }, 10000);
+          clearInterval(timerInterval);
+          textDisplay.textContent = "Best Score";
+          timeDisplay.textContent = score;
+        }, playTime * 1000);
       }
 
       function bonk(e) {
         if (!e.isTrusted) return;
-        score++;
-        this.classList.remove("up");
-        scoreBoard.textContent = score;
+        if (timeUp === false) {
+          score++;
+          this.classList.remove("up");
+          scoreBoard.textContent = score;
+        }
       }
 
       //isTrusted 라는게 e에 들어있는데, 내가 직접 누루지 않고 js 조사해서 치면 저게 false가 된다.
