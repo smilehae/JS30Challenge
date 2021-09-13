@@ -55,6 +55,26 @@
     <audio data-key="75" src="sounds/tom.wav"></audio>
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
-    <script src="main.js"></script>
+    <!-- <script src="main.js"></script> -->
+    <script>
+      const keySet = ["65","83","68","70","71","72","74","75","76"];
+
+      document.addEventListener('keydown',function(e){
+        //includes 복잡도 o(n)
+        if(keySet.includes(`${e.keyCode}`)){
+          const key = document.querySelector(`div[data-key='${e.keyCode}']`);
+          const audio = document.querySelector(`audio[data-key='${e.keyCode}']`);
+          key.classList.add('playing');
+          setTimeout(() => {
+            key.classList.remove('playing');
+          }, 100);
+          audio.load();
+          audio.play();
+
+        }
+
+
+      })
+    </script>
   </body>
 </html>
