@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>My Clock</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Tangerine&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <h1>today is September,14</h1>
+        <div class="clock">
+            <div class="clock_face">
+                <div class="hand"></div>
+                <div class="hand"></div>
+                <div class="hand"></div>
+            </div>
+        </div>
+    </body>
+
+    <style>
+        html{
+            background: linear-gradient(30deg, #e66565b2,#9198e5cc);
+            font-family: 'Tangerine', cursive;
+                }
+
+        body {
+            
+            margin: 0px;
+            display: flex;
+            flex-direction: column;
+            flex : 1;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .clock{
+            width:25rem;
+            height:25rem;
+            border:2rem solid white;
+            /*box shadow : x y blur spread color*/
+            box-shadow: 0px 0px 10px 8px rgba(0,0,0,0.2),inset 0px 0px 20px 10px rgba(0,0,0,0.1),
+            0px 0px 0px 3px rgba(0,0,0,0.1),inset 0px 0px 0px 5px #efefef;
+            border-radius: 50%;
+            padding:1rem;
+            position: relative;
+        }
+
+        .clock_face{
+            width:100%;
+            height:100%;
+            position: relative;
+        }
+
+        .hand{
+            width:50%;
+            height:3%;
+            background-color: slateblue;
+            border-top-left-radius: 40%;
+            border-bottom-left-radius: 40%;
+            box-shadow: 3px 2px 0px 1px #efefef15;
+            position: absolute;
+            top:50%;
+        }
+    </style>
+    <script>
+        const today = new Date();
+        const dateString = document.querySelector("h1");
+        const monthString=["January","February","March","April","May","June","July","August","September","October","November","December"];
+        dateString.textContent=`today is .. ${monthString[today.getMonth()-1]},${today.getDate()}`;
+        
+    </script>
+</html>
