@@ -40,7 +40,6 @@
       /*
       misc styles, nothing to do with CSS variables
     */
-
       body {
         text-align: center;
         background: #193549;
@@ -64,31 +63,30 @@
     </style>
 
     <script>
-      const spacingInput = document.querySelector("#spacing");
+      const spaceInput = document.querySelector("#spacing");
       const blurInput = document.querySelector("#blur");
       const colorInput = document.querySelector("#base");
       const img = document.querySelector("img");
-      console.log(img);
-      console.log(spacingInput, blurInput, colorInput);
+      const hl = document.querySelector(".hl");
 
-      function handleSpacing() {
-        img.style.padding = `${this.value}${this.dataset.sizing}`;
+      function handleSpace(){
+        img.style.padding=`${this.value}${this.dataset.sizing}`;
       }
 
       function handleBlur() {
         img.style.filter = `blur(${this.value}${this.dataset.sizing})`;
       }
 
-      function changeColor() {
-        console.log(this.value);
-        const h1 = document.querySelector(".hl");
-        h1.style.color = this.value;
-        img.style.backgroundColor = `${this.value}`;
+      function changeColor(){
+        hl.style.color=this.value;
+        img.style.backgroundColor =this.value;
       }
-
-      spacingInput.addEventListener("input", handleSpacing);
-      blurInput.addEventListener("input", handleBlur);
-      colorInput.addEventListener("input", changeColor);
+     
+      spaceInput.addEventListener('input',handleSpace);
+      blurInput.addEventListener('input',handleBlur);
+      colorInput.addEventListener('input',changeColor);
+      
+     
     </script>
   </body>
 </html>
