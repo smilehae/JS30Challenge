@@ -11,9 +11,10 @@
         <h1>today is September,14</h1>
         <div class="clock">
             <div class="clock_face">
-                <div class="hand"></div>
-                <div class="hand"></div>
-                <div class="hand"></div>
+                <div class="hand hour-hand"></div>
+                <div class="hand min-hand"></div>
+                <div class="hand second-hand"></div>
+                <div class="fixer"></div>
             </div>
         </div>
     </body>
@@ -23,9 +24,11 @@
             background: linear-gradient(30deg, #e66565b2,#9198e5cc);
             font-family: 'Tangerine', cursive;
                 }
+        h1{
+            font-size: 3rem;
+        }
 
         body {
-            
             margin: 0px;
             display: flex;
             flex-direction: column;
@@ -36,14 +39,14 @@
         }
 
         .clock{
-            width:25rem;
-            height:25rem;
+            width:20rem;
+            height:20rem;
             border:2rem solid white;
             /*box shadow : x y blur spread color*/
             box-shadow: 0px 0px 10px 8px rgba(0,0,0,0.2),inset 0px 0px 20px 10px rgba(0,0,0,0.1),
             0px 0px 0px 3px rgba(0,0,0,0.1),inset 0px 0px 0px 5px #efefef;
             border-radius: 50%;
-            padding:1rem;
+            padding:2rem;
             position: relative;
         }
 
@@ -51,17 +54,41 @@
             width:100%;
             height:100%;
             position: relative;
+            display: flex;
+            
+             
         }
 
         .hand{
             width:50%;
             height:3%;
-            background-color: slateblue;
+            border:3px solid white;          
             border-top-left-radius: 40%;
             border-bottom-left-radius: 40%;
             box-shadow: 3px 2px 0px 1px #efefef15;
             position: absolute;
             top:50%;
+        }
+        .hour-hand{
+            background-color:rgba(87, 105, 187, 0.4);
+        }
+        .min-hand{
+            background-color:rgba(187, 87, 87, 0.384);
+        }
+        .second-hand{
+            background-color: rgba(186, 92, 205, 0.274);
+        }
+        .fixer{
+            width:3rem;
+            height:3rem;
+            border:3px solid white;
+            background-color: rgba(205, 92, 92, 0.9);
+            /* box-shadow: inset 0px 0px 0px 5px rgba(255, 255, 255, 0.2); */
+            border-radius: 30%;
+            position: absolute;
+            top:43%;
+            left:43%;
+            
         }
     </style>
     <script>
@@ -69,6 +96,22 @@
         const dateString = document.querySelector("h1");
         const monthString=["January","February","March","April","May","June","July","August","September","October","November","December"];
         dateString.textContent=`today is .. ${monthString[today.getMonth()-1]},${today.getDate()}`;
+        const hands = Array.from(document.querySelectorAll(".hand"));
+        for(let i=0;i<hands.length;i++){
+            hands[i].style.transformOrigin='top right';
+        }
+
+        setInterval(() => {
+            const today2 = new Date();
+            const times = [today2.getHours(),today2.getMinutes(),today2.getSeconds()];
+            for(let i=0;i<3;i++){
+                let degree;
+                if(i==0) degree = 90+15*times[i];
+                else degree = 90+6*times[i];
+                hands[i].style.transform = `rotate(${degree}deg)`;
+            }
+        }, 1000);
         
+        console.log(hands);
     </script>
 </html>
