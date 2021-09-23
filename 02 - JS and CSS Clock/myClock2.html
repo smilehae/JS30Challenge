@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My clock</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+        <style>
+            *{
+                margin:0px;
+                /*이거 엄청 중요!! box sizing을 border box로 해야 패딩 포함해서 100%가 안쪽에 참*/
+
+                box-sizing: border-box;
+            }
+            html{
+                font-family: 'Lobster',cursive;
+                
+            }
+            h1{
+                font-size: 2.5rem;
+                font-weight: lighter;
+                color: white;
+                text-shadow: 1px 0 10px rgb(209, 160, 160);
+            }
+            body{
+                background:linear-gradient(160deg,rgb(231, 126, 126) 30%,rgb(254, 255, 187));
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap:20px;
+                
+            }
+            .clock{
+                width:30rem;
+                height:30rem;
+                border:30px solid white;
+                border-radius: 50%;
+                /*x y blur spread  color*/
+                box-shadow: 0 0 0 3px #efefef,0 0 10px 10px rgba(0,0,0,0.1),
+                inset 0px 0px 10px 10px rgba(0,0,0,0.1),inset 0 0 0 3px rgba(0,0,0,0.1);
+            }
+            .clock-face{                
+                padding: 5%;
+                width:100%;
+                height:100%;
+                position: relative;
+                
+            }
+            .hand{
+                position: absolute;
+                top:48%;
+                left:48%;
+                width:48%;
+                height:4%;
+                background-color: rgba(255, 8, 49, 0.30);
+                box-shadow: 0 3px 10px 2px rgba(0,0,0,0.1);
+                border-top-left-radius: 30%;
+                display: flex;
+                justify-content: end;
+                padding-right: 1rem;
+                color:black;
+            }
+            .min-hand{
+                background-color: rosybrown;
+            }
+            .sec-hand{
+                background-color:sandybrown;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Today I feel ... happy</h1>
+        <div class="clock">
+            <div class="clock-face">
+                <div class="hand hour-hand">H</div>
+                <div class="hand min-hand">M</div>
+                <div class="hand sec-hand">S</div>
+            </div>
+        </div>
+        <script>
+            
+            const hands = Array.from(document.querySelectorAll(".hand"));
+            let mul;
+            for(let i=0;i<3;i++){
+                hands[i].style.transformOrigin="bottom left";
+            }
+            setInterval(() => {
+                const today = new Date();                
+                const times = [today.getHours(), today.getMinutes(),today.getSeconds()];
+                for(let i=0;i<3;i++){
+                    if(i==0) mul = 30; //hour
+                    else mul = 6; //min, sec
+                    let thisTime = times[i]*mul-90;
+                    thisTime = thisTime% 360;
+                    hands[i].style.transform=`rotate(${thisTime}deg)`;
+                }
+               
+            }, 1000);
+        </script>
+    </body>
+</html>
