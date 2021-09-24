@@ -26,36 +26,37 @@
 
       // Some and Every Checks
       // Array.prototype.some() // is at least one person 19 or older?
+      const moreThanNinteen = people.some(person => person.year<= 2021-19);
+      console.log(moreThanNinteen);
       //some 메소드. 배열 안의 어떤 요소라도 주어진 함수를 통과하는지 확인.
-      const adults = people.some(function (person) {
-        return 2021 - person.year >= 19;
-      });
-      console.log(adults);
+   
       // Array.prototype.every() // is everyone 19 or older?
-      const allAdults = people.every(function (person) {
-        return 2021 - person.year >= 19;
-      });
-      console.log(allAdults);
-      // Array.prototype.find()
+      const allAdult = people.every(person=> person.year<=2021-19);
+      console.log(allAdult);
+       // Array.prototype.find()
       // Find is like filter, but instead returns just the one you are looking for
       // find the comment with the ID of 823423
-      console.log(comments.find((finder) => finder.id === 823423));
+      //조건을 만족하는 가장 첫번째 값 자체를 리턴
+      console.log(comments.find(comment => comment.id==823423));
 
       // Array.prototype.findIndex()
       // Find the comment with this ID
       // delete the comment with the ID of 823423
-      const index = comments.findIndex((finder) => finder.id === 823423);
-      comments.splice(index, 1);
+      const delIndex = comments.findIndex(comment => comment.id==823423);
+      //Array.splice(시작위치, 지우는 갯수, 추가할 것)
+      comments.splice(delIndex,1);
       console.log(comments);
+     
 
-      //다른 방법! 구조분해 사용하기
-      //0~index직전까지 넣고, index+1~끝까지 넣으면 index만 뺀 효과
-      //이렇게 하면, 기존 comment를 유지하면서, 하나 뺀 comment를 만들 수도 있다.
-      const newComments = [
-        ...comments.slice(0, index),
-        ...comments.slice(index + 1),
-      ];
-      console.log(newComments);
+      // //다른 방법! 구조분해 사용하기
+      // //0~index직전까지 넣고, index+1~끝까지 넣으면 index만 뺀 효과
+      // //이렇게 하면, 기존 comment를 유지하면서, 하나 뺀 comment를 만들 수도 있다.
+      // const newComments=[
+      //   ...comments.slice(0,delIndex),
+      //   ...comments.slice(delIndex+1)
+      // ];
+      // console.log(newComments);
+    
     </script>
   </body>
 </html>
