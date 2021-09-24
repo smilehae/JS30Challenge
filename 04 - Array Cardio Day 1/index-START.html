@@ -73,53 +73,52 @@
 
       // Array.prototype.filter()
       // 1. Filter the list of inventors for those who were born in the 1500's
-      // console.log(
-      //   inventors.filter((inventor) => {
-      //     return inventor.year >= 1500 && inventor.year < 1600;
-      //   })
-      // );
+     
+      const fifteen= inventors.filter((inventor) => {
+          return inventor.year >= 1500 && inventor.year < 1600;
+        });
+      console.table(fifteen);
       
-
       // Array.prototype.map()
       // 2. Give us an array of the inventors first and last names
-      // const inventorsName = inventors.map((inventor) => {
-      //   return `${inventor.first} ${inventor.last}`;
-      // });
+    
+      const inventorsName = inventors.map((inventor) => {
+        return `${inventor.first} ${inventor.last}`;
+      });
+      console.log(inventorsName);
     
 
       //console.log(inventorsName);
       // Array.prototype.sort()
       // 3. Sort the inventors by birthdate, oldest to youngest
-      // inventors.sort(function (a, b) {
-      //   if (a.year - b.year > 0) return 1;
-      //   else return -1;
-      // });
-      inventors.sort(function(a,b){
-        if(a.year-b.year>0)return 1;
-        else return -1;
-      });
+      const ordered = inventors.sort((a,b)=>a.year>b.year?1:-1);
+
+      console.table(ordered);
+      
+     
     
       // Array.prototype.reduce()
       // 4. How many years did all the inventors live all together?
-      // const yearTotal = inventors.reduce((total, inventor) => {
-      //   return total + (inventor.passed - inventor.year);
-      // }, 0);
+         
+      const livingYears = inventors.reduce((total,inventor)=>{
+        return total += (inventor.passed-inventor.year);
+      },0);
+      console.log(livingYears);
       // total이 이전까지 합친거, 그 다음이 현재의 값
      
       // 5. Sort the inventors by years lived
-      inventors.sort((a,b)=>{
+      const older = inventors.sort((a,b)=>{
         const ageA = a.passed-a.year;
         const ageB = b.passed-b.year;
-        if(ageA>ageB) return -1;
-        else return 1;
+        if(ageA<ageB) return 1;
+        else return -1;
+      }).map((inventor)=>{
+        const obj = inventor;
+        obj["age"]=inventor.passed-inventor.year;
+        return obj;
       })
-      // console.log(inventors.map((inventor=>{
-      //   const thisAge= inventor.passed-inventor.year;
-      //   const obj = inventor;
-      //   obj.age=thisAge;
-      //   return obj;
-      // })));
-      //console.log(inventors);
+      console.table(older);
+      
       // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
       // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
       // const category = document.querySelector(".mw-category");
@@ -130,22 +129,14 @@
 
       // 7. sort Exercise
       // Sort the people alphabetically by last name
-      people.sort(function(a,b){
-        //split하면 해당 단위로 나뉘어서 배열로 저장됨
-        const lastA = a.split(", ")[1];
-        const lastB = b.split(", ")[1];
-        if(lastA>lastB)return 1;
+      const names = people.sort(function(a,b){
+        const nameA = a.split(", ")[1];
+        const nameB = b.split(", ")[1];
+        if(nameA>nameB)return 1;
         else return -1;
       })
-      //console.log(people);
-      // people.sort(function (a, b) {
-      //   const lastA = a.split(", ")[1];
-      //   const lastB = b.split(", ")[1];
-      //   if (lastA > lastB) return 1;
-      //   else return -1;
-      // });
-      // console.log(people);
-
+      console.log(names);
+      
       // 8. Reduce Exercise
       // Sum up the instances of each of these
       //인스턴스 셀때는, if(인스턴스 in 객체)를 애용하자.
@@ -174,148 +165,9 @@
           total[cur]=1;
         }
         return total;
-      },{});
-      console.log(countObj);
-      // const countingObj = data.reduce(function (total, cur) {
-      //   if (cur in total) {
-      //     total[cur]++;
-      //   } else {
-      //     total[cur] = 1;
-      //   }
-      //   return total;
-      // }, {});
-
-      // // // Array.prototype.filter()
-      // // // 1. Filter the list of inventors for those who were born in the 1500's
-      // const inventors15 = inventors.filter(
-      //   (inventor) => inventor.year >= 1500 && inventor.year < 1600
-      // );
-      // // console.log(inventors15);
-      // //리턴할떄 값이 1인것만 통과됨
-
-      // // Array.prototype.map()
-      // // 2. Give us an array of the inventors first and last names
-      // const names = inventors.map(function (inventor) {
-      //   //이건 객체로 값을 뽑는 방법
-      //   // let obj = {};
-      //   // obj.first = inventor.first;
-      //   // obj.last = inventor.last;
-      //   // return obj;
-
-      //   //이건 답지 : 이렇게 string 으로 이루어진 배열로 뽑을 수도 있다.
-      //   return `${inventor.first}, ${inventor.last}`;
-      // });
-      // // console.log(names);
-
-      // // Array.prototype.sort()
-      // // 3. Sort the inventors by birthdate, oldest to youngest
-      // //a와 b를 비교할때, 0보다 작으면 a가 더 먼저온다.
-      // //0보다 크면 b가 먼저 온다.
-      // inventors.sort(function (a, b) {
-      //   return a.year - b.year;
-      // });
-
-      // //답지 ) 3항연산자
-      // // inventors.sort((a, b) => (a.year > b.year ? 1 : -1));
-      // //a가 젋어? 그럼 1 (b먼저 옴) 아냐? 그럼 -1 (a 먼저옴) : 나이 든 사람 먼저!
-      // //console.log(inventors);
-
-      // // Array.prototype.reduce()
-      // // 4. How many years did all the inventors live all together?
-      // //객체의 reduce시 초기값 반드시 필요.
-      // //accumulator:더해지는 값 currentValue: 현재 배열위치의 값
-      // let sum = inventors.reduce(function (accumulator, currentValue) {
-      //   return accumulator + (currentValue.passed - currentValue.year);
-      // }, 0);
-      // //console.log(sum);
-
-      // // 5. Sort the inventors by years lived
-      // inventors.sort(function (a, b) {
-      //   const ageA = a.passed - a.year;
-      //   const ageB = b.passed - b.year;
-      //   return ageA > ageB ? -1 : 1;
-      // });
-      // const inventorAge = inventors.map(function (inventor) {
-      //   const obj = {};
-      //   obj.last = inventor.last;
-      //   obj.age = inventor.passed - inventor.year;
-      //   return obj;
-      // });
-
-      // // console.log(inventorAge);
-      // // console.log(inventors);
-
-      // // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
-      // // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-      // const aList = document.querySelectorAll(".mw-category-group li a");
-      // //nodeList 상태 -> array
-      // const aArray = Array.from(aList);
-      // //a가 들어있는 array. 여기서 innerHTML만 추출 : 여기서 객체만들어서 추출도 되지만, 어차피 innerHTML만 필요하니까 바로 return a.innerHTML도 가능
-      // const texts = aArray.map(function (a) {
-      //   const obj = {};
-      //   obj.text = a.innerHTML;
-      //   return obj;
-      // });
-      // //여기서 de가 있는 것들만 남기기
-      // const ans = texts.filter((a) => a.text.includes("de"));
-
-      // console.log(ans);
-
-      // //정답지의 짱짱한 풀이
-      // //하나 선택한 것에 대해서 다시 querySelectorAll 등 가능
-      // // const category = document.querySelector(".mw-category");
-      // // const links = Array.from(category.querySelectorAll("a"));
-      // // const de = links
-      // //   .map((a) => a.textContent)
-      // //   .filter((word) => word.includes("de"));
-      // // console.log(de);
-
-      // // 7. sort Exercise
-      // // Sort the people alphabetically by last name
-      // //        "Biondo, Frank",
-      // const str = "Biondo, Frank";
-      // const words = str.split(", ");
-
-      // people.sort(function (a, b) {
-      //   // const word1 = a.split(", ");
-      //   // const word2 = b.split(", ");
-      //   // return word1[1] > word2[1] ? 1 : -1;
-
-      //   //     답지의 엄청난 풀이 : 구조분해!
-      //   const [aFirst, aLast] = a.split(", ");
-      //   const [bFirst, bLast] = b.split(", ");
-      //   return aLast > bLast ? 1 : -1;
-      // });
-      // console.log(people);
-      // // 8. Reduce Exercise
-      // // Sum up the instances of each of these
-      // //인스턴스 셀때는, if(인스턴스 in 객체)를 애용하자.
-      // //reduce 맨 끝에 초기값 써주는거를 잊지 말것. 초기값을 {}로 써줘야 객체로 인정
-      // const data = [
-      //   "car",
-      //   "car",
-      //   "truck",
-      //   "truck",
-      //   "bike",
-      //   "walk",
-      //   "car",
-      //   "van",
-      //   "bike",
-      //   "walk",
-      //   "car",
-      //   "van",
-      //   "car",
-      //   "truck",
-      // ];
-      // let transport = data.reduce(function (allNames, name) {
-      //   if (name in allNames) {
-      //     allNames[name]++;
-      //   } else {
-      //     allNames[name] = 1;
-      //   }
-      //   return allNames;
-      // }, {});
-      // console.log(transport);
+      },{})
+      console.table(countObj);
+     
     </script>
   </body>
 </html>
