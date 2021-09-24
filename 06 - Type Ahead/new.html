@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      const endpoint =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+     
+      const cities = [];
+      const container = document.querySelector(".suggestions");
+      /*
+        fetch API
+        fetch() 메소드를 사용해서 내가 정보를 fetch하고 싶은곳에 request를 보낸다.
+        promise객체를 리턴하는데, 거기에 리퀘스트에 대한 response가 담겨져 있다.
+        error status라도 뭔가 온다고 한다.
+        Request()랑 Response()도 쓸순있는데, 거의  fetch를 쓴 결과를 handle한다고 한다.
+
+        jquery의 Ajax랑 다른점!
+        Promise객체는 error status가 와도 거절하지 않는다. 그냥 ok status가 온것 처럼 작동한다. 
+        네트워크 오류로 실제 request가 끝나지 않는 경우에만 reject한다.
+        cross origin cookie를 보내지 않는다고 한다 ( 이건 나중에 알아보기 )
+
+      */
+
+    fetch(endpoint)
+        .then(response=>response.json())
+        .then(data => cities.push(...data));
+     //fetch하면, response를 해결하는 promise객체를 반환한다.
+     //response객체에는 HTTP response가 다 들어 있으므로,
+     //해당 객체에서 json() 메소드로 response의 body부분을 parse해서 JSON으로 가져올 수 있는 promise를 리턴한다.
+    
+     //하단의 내용을 바로 하려고 했더니 빈 배열이 나왔다. 아직 fetch를 완료하기 전에 cities에 접근해서 그런 것으로 추정!
+    //const simpleCities = cities.map(cur=>`${cur.city}, ${cur.state}`);
+        
+    function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function handleSearch(e){        
+        const content = cities
+        .filter(city=> {
+            //대소문자 구별없이 단어 매치 판별하기. 
+            //1. 다 소문자로 바꾸기 - includes로 판별
+            // const typed = this.value.toLowerCase();
+            // const cityName = city.city.toLowerCase();
+            // const stateName = city.state.toLowerCase();
+            // return cityName.includes(typed) || stateName.includes(typed);
+            //2. regex사용하기
+            const regex = new RegExp(this.value,"gi");
+            return city.city.match(regex) || city.state.match(regex);
+        })
+        .map((city)=>{ 
+            //g는 global. 특정 요소가 있다고 바로 반환 X i는 대소문자 무시
+            const regex= new RegExp(this.value,"gi");
+            const cityName = city.city.replace(regex,`<span class="hl">${this.value}</span>`);
+            const stateName = city.state.replace(regex,`<span class="hl">${this.value}</span>`)
+            return `
+            <li>
+                <span class="name">${cityName}, ${stateName}</span>
+                <span class="population">${numberWithCommas(city.population)}</span>
+            </li>`;
+        })
+        .join("");        
+        container.innerHTML=content;
+    }
+    document.querySelector(".search").addEventListener('input',handleSearch);
+     
+    </script>
+  </body>
+</html>
