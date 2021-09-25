@@ -92,5 +92,5 @@ h2 {
 
 .mybtn:hover {
   background-color: rgba(0, 0, 0, 0.3);
-  transition: all 0.5s;
+  transition: background 0.5s;
 }
