@@ -22,8 +22,8 @@
       <input name="rate" type="range" min="0" max="3" value="1" step="0.1" />
 
       <label for="pitch">Pitch:</label>
-
       <input name="pitch" type="range" min="0" max="2" step="0.1" />
+    
       <textarea name="text">Hello! I love JavaScript 👍</textarea>
       <button id="stop">Stop!</button>
       <button id="speak">Speak</button>
@@ -32,55 +32,51 @@
     <script>
       //SpeechSynthesisUtterance는 Web Speech API의 인터페이스이며, speench의 content를 담고 있는 객체이다. 여기에 voice, pitch, rate 등등이 있다
       const msg = new SpeechSynthesisUtterance();
-      let voices = [];
-      const voicesDropdown = document.querySelector('[name="voice"]');
-      const options = Array.from(
-        document.querySelectorAll("[type=range],[name='text']")
-      );
-      const speakButton = document.querySelector("#speak");
-      const stopButton = document.querySelector("#stop");
+      let voices=[];
+      const voicesDropdown = document.querySelector("#voices");
+      const options = Array.from(document.querySelectorAll('[type="range"],[name="text"]'));
+      const speakBtn = document.querySelector("#speak");
+      const stopBtn = document.querySelector("#stop");
+      msg.text=document.querySelector("[name='text']").value;
 
-      msg.text = document.querySelector("[name='text']").value;
-
-      //가장 처음에 가능한 목소리 목록을 불러온다.
-
-      function populateVoices() {
-        voices = this.getVoices();
-        voicesDropdown.innerHTML = voices
-          .filter((voice) => voice.lang.includes("en"))
-          .map((voice) => {
-            return `<option value="${voice.name}">${voice.name}(${voice.lang})</option>`;
-          })
-          .join("");
+      // //가장 처음에 가능한 목소리 목록을 불러온다.
+      function populateVoices(){
+        voices=this.getVoices();
+        const content = voices
+        .filter(voice=> voice.lang.includes("en"))
+        .map(voice=> `<option>${voice.name}</option>`)
+        .join("");
+        voicesDropdown.innerHTML = content;
       }
-
+      
       function setVoice() {
         console.log(this.value);
-        msg.voice = voices.find((voice) => voice.name === this.value);
-        toggle();
+        msg.voice = voices.find(voice=> voice.name===this.value);
+        toggleVoice();
       }
 
-      function setOptions() {
-        console.log(this.value);
-        msg[this.name] = this.value;
-        toggle();
+      function setOptions(){
+        msg[this.name]=this.value;
+        toggleVoice();
       }
 
-      function toggle(startOver = true) {
+      function toggleVoice(start=true){
         speechSynthesis.cancel();
-        if (startOver) {
+        if(start){
+          console.log("start speaking");
           speechSynthesis.speak(msg);
         }
+        
       }
-      voicesDropdown.addEventListener("change", setVoice);
       speechSynthesis.addEventListener("voiceschanged", populateVoices);
-      options.forEach((option) =>
-        option.addEventListener("change", setOptions)
-      );
-      speakButton.addEventListener("click", toggle);
-      //bind(null,원하는 거) : 함수를 부르고 연결해준다
-      // stopButton.addEventListener("click", toggle.bind(null, false));
-      stopButton.addEventListener("click", () => toggle(false));
+      voicesDropdown.addEventListener("click",setVoice);
+      options.forEach(option=> option.addEventListener("change",setOptions));
+      speakBtn.addEventListener("click",toggleVoice);
+      //stopBtn.addEventListener("click",()=>toggleVoice(false));
+       stopBtn.addEventListener("click",toggleVoice.bind(null,false));
+      // //bind(null,원하는 거) : 함수를 부르고 연결해준다
+     
+
     </script>
   </body>
 </html>
